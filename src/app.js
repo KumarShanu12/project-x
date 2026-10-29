@@ -6,10 +6,17 @@ const User = require("./models/user");
 // const user = require('./models/user');
 
 const cookieParser = require('cookie-parser')
+const cors = require('cors')
+app.use(cors({
+  origin:"http://localhost:5175",
+  credentials:true
+}))
 
 app.use(express.json());
 
 app.use(cookieParser())
+
+
 
 
 const authRouter =  require("./routes/auth")

@@ -49,12 +49,12 @@ const userSchema = mongoose.Schema({
     },
     photoUrl :{
          type : String,
-         validate(value){
-            if(!validator.isURL(value)){
-                throw new Error('invalid URL',value)
-            }
-        },
-        // default:""
+        //  validate(value){
+        //     if(!validator.isURL(value)){
+        //         throw new Error('invalid URL',value)
+        //     }
+        // },
+        default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRICx31hto7pdeK9C4ydVj4y9nXFEfmG72p4x8vhtKFCA&s=10"
     },
     skills : {
         type: [String],

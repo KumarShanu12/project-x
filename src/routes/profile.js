@@ -10,8 +10,8 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
   
      
   
-      const { firstName, lastName, emailId } = req.user;
-      res.send({ firstName, lastName, emailId });
+      const { firstName, lastName, emailId ,photoUrl } = req.user;
+      res.send({ firstName, lastName, emailId , photoUrl });
     } catch (error) {
       res.status(400).send("Error: " + error.message);
     }

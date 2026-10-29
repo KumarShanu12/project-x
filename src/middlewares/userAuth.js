@@ -6,7 +6,9 @@ const userAuth = async (req, res, next) => {
       const token = req.cookies.token;
   
       if (!token) {
-        throw new Error("Authentication failed: No token provided");
+        // throw new Error("Authentication failed: No token provided");
+
+        res.status(401).send('Token is not Valid , Try Login again !!')
       }
 
       const decoded = jwt.verify(token, "SHANU");
