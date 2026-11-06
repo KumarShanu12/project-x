@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const User = require("../models/user")
 const userAuth = async (req, res, next) => {
     try {
-      console.log("Cookies:", req.cookies); // Debugging log
+      // console.log("Cookies:", req.cookies); // Debugging log
       const token = req.cookies.token;
   
       if (!token) {
@@ -11,7 +11,7 @@ const userAuth = async (req, res, next) => {
         res.status(401).send('Token is not Valid , Try Login again !!')
       }
 
-      const decoded = jwt.verify(token, "SHANU");
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
       console.log('decoded',decoded)
       const user = await User.findById(decoded._id);
       console.log('user',user)

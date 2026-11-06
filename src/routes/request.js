@@ -5,12 +5,16 @@ const User = require("../models/user");
 
 const connection = require("../models/connectionRequest");
 
+const sendEmail = require('../utils/sendEmail')
+
 requestRouter.post(
   "/request/send/:status/:toUserId",
   userAuth,
   async (req, res) => {
     try {
       const user = req.user;
+
+       
 
       const fromUserId = user._id;
       const toUserId = req.params.toUserId;
@@ -57,13 +61,18 @@ requestRouter.post(
 
       const data = await ConnectionRequest.save();
 
+       console.log('datasas')
+
+      const emailResponse = await sendEmail.run('hello','shanu')
+
+      console.log('emailResponse',emailResponse)
+
       res.json({
         message: user.firstName + status + toUser.firstName,
-
         data,
       });
 
-      // res.send(user.lastName+'is sending set connection')
+       
     } catch (error) {
       res.status(400).send("Error: " + error.message);
     }
