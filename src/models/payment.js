@@ -29,7 +29,7 @@ const paymentSchema =  new mongoose.Schema(
             required:true
         },
         notes:{
-            firstName:{
+            firstName:{ 
                 type:String ,
              
             },
