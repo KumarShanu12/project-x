@@ -12,12 +12,12 @@ const User = require('../models/user')
 
 paymentRouter.post('/payment/create', userAuth ,async (req,res)=>{
 
-    const {membershipType} = req.body
+    const {memberShipType} = req.body
     const {firstName,lastName,emailId} = req.user
     const {memberShip} = require('../utils/constants')
     try {
         const order = await razorpayInstance.orders.create({
-            "amount": memberShip[membershipType]*100, // its in paisa 
+            "amount": memberShip[memberShipType]*100, // its in paisa 
             "currency": "INR",
             "receipt": "receipt#1",
              
@@ -25,7 +25,7 @@ paymentRouter.post('/payment/create', userAuth ,async (req,res)=>{
               "firstName": firstName,
               "lastName": lastName,
               "emailId" : emailId,
-              "memberShip" : membershipType
+              "memberShip" : memberShipType
             }
           })
 
@@ -72,7 +72,7 @@ paymentRouter.post('/payment/create', userAuth ,async (req,res)=>{
 paymentRouter.post('/payment/webhook',async(req,res)=>{
     try {
 
-        const webhookSignature = req.get['X-Razorpay-Signature']
+        const webhookSignature = req.get9('X-Razorpay-Signature')
         
 
 const isWebHookValid =  validateWebhookSignature(JSON.stringify(req.body), webhookSignature, process.env.RAZOR_PAY_WEBHOOK_SECRET)
