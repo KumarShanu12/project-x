@@ -9,7 +9,7 @@ const User = require("./models/user");
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 app.use(cors({
-  exposedHeaders: ['X-Razorpay-Signature', 'x-rtb-fingerprint-id', 'request-id'],
+  exposedHeaders: ['X-Razorpay-Signature'],
   origin:"http://localhost:5175",
   credentials:true
 }))

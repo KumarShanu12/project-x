@@ -50,7 +50,7 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
 
     // return back the result
 
-    res.send({ ...savedDb.toJSON(), keyId: process.env.RAZOR_PAY_KEY_ID });
+    res.status(200).send({ ...savedDb.toJSON(), keyId: process.env.RAZOR_PAY_KEY_ID });
   } catch (error) {
     return res.status(500).send({ message: "OOps", data: error.message });
   }
