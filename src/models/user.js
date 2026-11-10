@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
 const validator = require('validator')
+const { memberShip } = require('../utils/constants')
 
 const userSchema = mongoose.Schema({
     firstName : {
@@ -65,6 +66,14 @@ const userSchema = mongoose.Schema({
         } 
         
     },
+
+    isPremium:{
+        type:Boolean,
+        default:false
+    },
+    memberShiptype:{
+        type:String,
+    }
 
 
 
