@@ -50,13 +50,15 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
   }
 });
 
-paymentRouter.post("/payment/webhook", express.raw({ type: "application/json" }), async (req, res) => {
+paymentRouter.post("/payment/webhook",  async (req, res) => {
   try {
     const webhookSignature = req.get("X-Razorpay-Signature");
+
+    console.log('webhookSignature',webhookSignature)
     
     // 1. Validate with raw body (Buffer) so signature always matches perfectly
     const isWebHookValid = validateWebhookSignature(
-      req.body, 
+      JSON.stringify(req.body), 
       webhookSignature,
       process.env.RAZOR_PAY_WEBHOOK_SECRET
     );
@@ -65,6 +67,8 @@ paymentRouter.post("/payment/webhook", express.raw({ type: "application/json" })
       console.error("Webhook validation failed!");
       return res.status(400).json({ msg: "Webhook validation failed!" });
     }
+
+    console.log('shanu',isWebHookValid)
 
     // 2. Parse the raw buffer to JSON object to access data
     const payloadJson = JSON.parse(req.body.toString());
