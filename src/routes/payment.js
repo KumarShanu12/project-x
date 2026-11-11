@@ -71,8 +71,9 @@ paymentRouter.post("/payment/webhook",  async (req, res) => {
     console.log('shanu',isWebHookValid)
 
     // 2. Parse the raw buffer to JSON object to access data
-    const payloadJson = JSON.parse(req.body.toString());
-    const paymentDetails = payloadJson.payload.payment.entity;
+    // const payloadJson = JSON.parse(req.body);
+    const paymentDetails = req.body.payload.payment.entity;
+    // const paymentDetails = payloadJson.payload.payment.entity;
 
     // 3. Find payment in DB
     const payment = await Payment.findOne({ orderId: paymentDetails.order_id });
