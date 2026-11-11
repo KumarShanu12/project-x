@@ -8,11 +8,19 @@ const User = require("./models/user");
 
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
+// CORS configuration
 app.use(cors({
-  exposedHeaders: ['X-Razorpay-Signature'],
-  origin:"http://localhost:5175",
-  credentials:true
-}))
+  exposedHeaders: ['x-rtb-fingerprint-id', 'request-id', 'X-Razorpay-Signature'],
+  origin: "http://localhost:5175",
+  credentials: true,
+}));
+
+// Permissions Policy
+app.use((req, res, next) => {
+  res.setHeader("Permissions-Policy", "accelerometer=(), gyroscope=(), magnetometer=(), camera=(), microphone=(), geolocation=()");
+  next();
+});
+
 
 require('./utils/cronjob')
 
