@@ -20,7 +20,7 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
     const order = await razorpayInstance.orders.create({
       amount: memberShip[memberShipType] * 100, // its in paisa
       currency: "INR",
-      receipt: "receipt#1",
+      // receipt: "receipt#1",
       notes: {
         firstName: firstName,
         lastName: lastName,
@@ -37,7 +37,7 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
       status: order.status,
       currency: order.currency,
       notes: order.notes,
-      recepit: order.receipt, // Fixed typo
+      // recepit: order.receipt, // Fixed typo
     });
 
     const savedDb = await payment.save();
