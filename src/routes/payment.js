@@ -50,7 +50,7 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
   }
 });
 
-paymentRouter.post("/payment/webhook", express.raw({ type: "application/json" }), async (req, res) => {
+paymentRouter.post("/payment/webhook", express.json(), async (req, res) => {
   try {
     console.log("Webhook payload:", req.body);
 
