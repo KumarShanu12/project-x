@@ -20,7 +20,7 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
     const order = await razorpayInstance.orders.create({
       amount: memberShip[memberShipType] * 100, // its in paisa
       currency: "INR",
-      // receipt: "receipt#1",
+      receipt: "receipt#1",
       notes: {
         firstName: firstName,
         lastName: lastName,
@@ -37,7 +37,7 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
       status: order.status,
       currency: order.currency,
       notes: order.notes,
-      // recepit: order.receipt, // Fixed typo
+      receipt: order.receipt, // Fixed typo receipt
     });
 
     const savedDb = await payment.save();
@@ -50,33 +50,38 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
   }
 });
 
-paymentRouter.post("/payment/webhook", express.json(), async (req, res) => {
+paymentRouter.post("/payment/webhook", express.raw({ type: "application/json" }), async (req, res) => {
   try {
-    console.log("Webhook payload:", req.body);
-
     const webhookSignature = req.get("X-Razorpay-Signature");
-    console.log("Webhook Signature:", webhookSignature);
-
+    
+    // 1. Validate with raw body (Buffer) so signature always matches perfectly
     const isWebHookValid = validateWebhookSignature(
-      JSON.stringify(req.body),
+      req.body, 
       webhookSignature,
       process.env.RAZOR_PAY_WEBHOOK_SECRET
     );
 
     if (!isWebHookValid) {
+      console.error("Webhook validation failed!");
       return res.status(400).json({ msg: "Webhook validation failed!" });
     }
 
-    const paymentDetails = req.body.payload.payment.entity;
+    // 2. Parse the raw buffer to JSON object to access data
+    const payloadJson = JSON.parse(req.body.toString());
+    const paymentDetails = payloadJson.payload.payment.entity;
+
+    // 3. Find payment in DB
     const payment = await Payment.findOne({ orderId: paymentDetails.order_id });
 
     if (!payment) {
       return res.status(404).json({ msg: "Payment not found!" });
     }
 
+    // 4. Update Payment Status
     payment.status = paymentDetails.status;
     await payment.save();
 
+    // 5. Find User and Update
     const user = await User.findOne({ _id: payment.userId });
 
     if (!user) {
@@ -84,7 +89,8 @@ paymentRouter.post("/payment/webhook", express.json(), async (req, res) => {
     }
 
     user.isPremium = true;
-    user.memberShiptype = payment.notes.memberShiptype;
+    // Fix: Using Capital 'T' matching the exact key saved during /payment/create
+    user.memberShiptype = payment.notes.memberShipType; 
     await user.save();
 
     return res.status(200).json({ msg: "Webhook processed successfully!" });

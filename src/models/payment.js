@@ -24,10 +24,10 @@ const paymentSchema =  new mongoose.Schema(
             type:String,
             required:true
         },
-        // recepit:{
-        //     type:String,
-        //     // required:true
-        // },
+        receipt:{
+            type:String,
+            // required:true
+        },
         notes:{
             firstName:{ 
                 type:String ,
